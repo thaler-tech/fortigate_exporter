@@ -7,7 +7,7 @@
 
 Prometheus exporter for FortiGate® firewalls.
 
-**NOTE:** This is not an official Fortinet product, it is developed fully independently by professionals and hobbyists alike.
+**NOTE:** This is not an official Fortinet product, it is developed fully independently by professionals and hobbyists alike. This is based on "https://github.com/prometheus-community/fortigate_exporter" GitHub repository.
 
   * [Supported Metrics](#supported-metrics)
   * [Usage](#usage)
@@ -267,12 +267,12 @@ Per-VDOM, managed switch and interface:
 Example:
 
 ```
-$ ./fortigate_exporter -auth-file ~/fortigate-key.yaml
+$ ./fortigate_exporter -auth-file ~/fortigate-key.yml
 # or
-$ docker run -d -p 9710:9710 -v /path/to/fortigate-key.yaml:/config/fortigate-key.yaml quay.io/bluecmd/fortigate_exporter:master
+$ docker run -d -p 9710:9710 -v /path/to/fortigate-key.yml:/config/fortigate-key.yml thalertech/fortigate_exporter:latest
 ```
 
-Where `fortigate-key.yaml` contains pairs of FortiGate targets and API keys in the following format:
+Where `fortigate-key.yml` contains pairs of FortiGate targets and API keys in the following format:
 
 ```
 "https://my-fortigate":
@@ -342,7 +342,7 @@ To probe a FortiGate, do something like `curl 'localhost:9710/probe?target=https
 
 ### Dynamic configuration
 In use cases where the Fortigates that is to be scraped through the fortigate-exporter is configured in 
-Prometheus using some discovery method it becomes problematic that the `fortigate-key.yaml` configuration also
+Prometheus using some discovery method it becomes problematic that the `fortigate-key.yml` configuration also
 has to be updated for each fortigate, and that the fortigate-exporter needs to be restarted on each change. 
 For that scenario the token can be passed as a query parameter, `token`, to the fortigate. 
 
@@ -350,14 +350,14 @@ Example:
 ```bash
 curl 'localhost:9710/probe?target=https://192.168.2.31&token=ghi6eItWzWewgbrFMsazvBVwDjZzzb'
 ```
-It is also possible to pass a `profile` query parameter. The value will match an entry in the `fortigate-key.yaml` 
+It is also possible to pass a `profile` query parameter. The value will match an entry in the `fortigate-key.yml` 
 file, but only to use the `probes` section for include/exclude directives.
 
 Example:
 ```bash
 curl 'localhost:9710/probe?target=https://192.168.2.31&token=ghi6eItWzWewgbrFMsazvBVwDjZzzb&profile=fs124e'
 ```
-The `profile=fs124e` would match the following entry in `fortigate-key.yaml`.
+The `profile=fs124e` would match the following entry in `fortigate-key.yml`.
 
 Example:
 ```yaml
@@ -377,7 +377,7 @@ fs124e:
 
 | flag  | default value  |  description  |
 |---|---|---|
-| -auth-file      | fortigate-key.yaml  | path to the location of the key file |
+| -auth-file      | fortigate-key.yml  | path to the location of the key file |
 | -listen         | :9710  | address to listen for incoming requests  |
 | -scrape-timeout | 30     | timeout in seconds  |
 | -https-timeout  | 10     | timeout in seconds for establishment of HTTPS connections  |
@@ -530,7 +530,7 @@ like this:
 
 ```bash
 docker build -t fortigate_exporter .
-docker run -d -p 9710:9710 -v /path/to/fortigate-key.yaml:/config/fortigate-key.yaml fortigate_exporter
+docker run -d -p 9710:9710 -v /path/to/fortigate-key.yml:/config/fortigate-key.yml fortigate_exporter
 ```
 
 #### docker-compose
@@ -541,9 +541,9 @@ prometheus_fortigate_exporter:
   ports:
     - 9710:9710
   volumes:
-    - /path/to/fortigate-key.yaml:/config/fortigate-key.yaml
+    - /path/to/fortigate-key.yml:/config/fortigate-key.yml
   # Applying multiple parameters
-  command: ["-auth-file", "/config/fortigate-key.yaml", "-insecure"]
+  command: ["-auth-file", "/config/fortigate-key.yml", "-insecure"]
   restart: unless-stopped
 ```
 
